@@ -3,7 +3,7 @@
 import logging
 import pandas as pd
 
-from app.config import UMLS_API_KEY, UMLS_EXPAND
+from app.config import UMLS_API_KEY, UMLS_EXPAND, MAX_CANDIDATES
 from app.graph.nodes.umls_enrichment import UMLSEnricher
 
 logger = logging.getLogger(__name__)
@@ -83,6 +83,10 @@ def enrich_with_umls(state: dict) -> dict:
 
     if new_codes:
         updated = codes + new_codes
+        # re-cap to MAX_CANDIDATES so LLM scoring stays affordable
+        if len(updated) > MAX_CANDIDATES:
+            logger.info("UMLS: capping %d codes back to %d", len(updated), MAX_CANDIDATES)
+            updated = updated[:MAX_CANDIDATES]
         logger.info("UMLS: added %d new codes (%d total)", len(new_codes), len(updated))
         return {"enriched_codes": updated}
 

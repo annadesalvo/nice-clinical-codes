@@ -27,7 +27,7 @@ def build_prompt(condition: str) -> list:
         '   "classifier_score": null,\n'
         '   "llm_score": null,\n'
         '   "usage_frequency": null\n'
-        "4. vocabulary MUST be either 'SNOMED CT' or 'ICD-10'.\n"
+        "4. vocabulary MUST be either 'SNOMED' or 'ICD-10'.\n"
         "5. Do NOT group by vocabulary.\n"
         "6. Do NOT use nested objects.\n"
         "7. Do NOT include any text outside JSON.\n\n"

@@ -190,7 +190,7 @@ The Docker build runs data ingestion automatically — no manual step needed. SQ
 University of Cambridge Data Science (PACE), developed in collaboration with NICE (National Institute for Health and Care Excellence).
 
 - **Carlos Ramirez** — Engineering Lead (pipeline architecture, multi-agent system, AWS deployment)
-- **Anna Deluca** — Evaluation & Quality Assurance
+- **Anna Desalvo** — Evaluation & Quality Assurance
 - **Dom Cage** — Project Manager & Baseline Integration
 - **Ash** — Research & Data Analysis
 - **Ish** — Research

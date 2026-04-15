@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { searchCodes, exportCodes } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { searchCodes, exportCodes, createCodelist } from "@/lib/api";
 import type { CodeResult, SearchResponse } from "@/lib/api";
+import { useUser } from "@/lib/useUser";
 
 const PAGE_SIZE = 20;
 
@@ -127,8 +129,35 @@ export default function Home() {
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [selectedCode, setSelectedCode] = useState<CodeResult | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [decisionFilter, setDecisionFilter] = useState("all");
+
+  const { user } = useUser();
+  const router = useRouter();
+
+  const handleSaveAsDraft = async () => {
+    if (!response?.search_id) return;
+    if (!user) {
+      router.push(`/login?next=/`);
+      return;
+    }
+    const defaultName = response.query
+      ? `${response.query} — ${new Date().toLocaleDateString()}`
+      : `Codelist — ${new Date().toLocaleString()}`;
+    const name = window.prompt("Name this codelist:", defaultName);
+    if (!name) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const cl = await createCodelist(response.search_id, name);
+      router.push(`/codelists/${cl.id}`);
+    } catch (e) {
+      setSaveError(String(e));
+      setSaving(false);
+    }
+  };
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -366,6 +395,14 @@ export default function Home() {
               </div>
               <div className="flex gap-2">
                 <button
+                  onClick={handleSaveAsDraft}
+                  disabled={saving || !response?.search_id}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#00436C] text-white text-sm font-medium hover:bg-[#005EA5] transition-colors disabled:opacity-50"
+                  title={user ? "Save as a reviewable draft codelist" : "Sign in to save"}
+                >
+                  {saving ? "Saving…" : "Save as draft"}
+                </button>
+                <button
                   onClick={() => handleExport("csv")}
                   disabled={exporting || !response?.search_id}
                   className="inline-flex items-center gap-2 px-5 py-2 bg-[#005EA5] text-white text-sm font-medium hover:bg-[#00436E] transition-colors disabled:opacity-50"
@@ -383,6 +420,9 @@ export default function Home() {
                   Export Excel
                 </button>
               </div>
+              {saveError && (
+                <div className="ml-auto text-xs text-red-700">{saveError}</div>
+              )}
             </div>
           </div>
 

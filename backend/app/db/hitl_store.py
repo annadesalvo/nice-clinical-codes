@@ -264,13 +264,6 @@ def list_codelists(user_id: int | None = None, status: str | None = None) -> lis
     return [dict(r) for r in conn.execute(sql, params)]
 
 
-def update_status(cid: str, status: str, user_id: int) -> None:
-    conn = get_connection()
-    conn.execute("UPDATE codelists SET status = ? WHERE id = ?", (status, cid))
-    _append_audit(conn, cid, event=status, user_id=user_id, details={})
-    conn.commit()
-
-
 # --- review / approval ------------------------------------------------------
 
 def submit_review(

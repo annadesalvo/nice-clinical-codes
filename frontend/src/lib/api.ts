@@ -12,7 +12,6 @@ export interface CodeResult {
   rationale: string;
   sources: string[];
   usage_frequency: number | null;
-  classifier_score: number | null;
 }
 
 export interface SearchResponse {

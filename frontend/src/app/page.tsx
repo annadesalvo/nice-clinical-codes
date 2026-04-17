@@ -453,14 +453,6 @@ export default function Home() {
                     <dd className="text-gray-600 mt-0.5">{selectedCode.rationale}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold">Classifier Score</dt>
-                    <dd className="text-gray-600 mt-0.5">
-                      {selectedCode.classifier_score != null
-                        ? `${Math.round(selectedCode.classifier_score * 100)}%`
-                        : "N/A"}
-                    </dd>
-                  </div>
-                  <div>
                     <dt className="font-semibold">Algorithm Version</dt>
                     <dd className="text-gray-600 mt-0.5">0.1.0</dd>
                   </div>

@@ -22,6 +22,14 @@ CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "clinical_codes")
 # Database
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/codes.db")
 
+# HITL (codelists, reviews, audit) — kept separate from reference codes
+# because the reference DB is baked into the Docker image on build, while
+# HITL state is mutable per-deployment. Production: back this with RDS/Postgres.
+HITL_DATABASE_URL = os.getenv("HITL_DATABASE_URL", "sqlite:///./data/hitl.db")
+
+# Session cookie secret — demo default; set in prod via SSM
+SESSION_SECRET = os.getenv("SESSION_SECRET", "dev-only-change-me")
+
 # Pipeline
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "NeuML/pubmedbert-base-embeddings")
 LLM_MODEL = os.getenv("LLM_MODEL", "claude-sonnet-4-20250514")
